@@ -1,4 +1,4 @@
-import { button } from '../../components/button'
+import { button } from '@/components/button'
 import styles from './about-us.module.scss'
 
 export const AboutUs = () => {

@@ -1,20 +1,26 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const isProduction = process.env.NODE_ENV === 'production'
 
 console.log('isProduction', isProduction)
 
 const config = {
+    context: path.resolve(__dirname, 'src'),
     entry: {
-        index: './src/index.ts',
+        index: './index.ts',
         //js_file: './src/js_file.js',
     },
     devtool: 'inline-source-map',
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        },
     },
     output: {
-        filename: '[name].bundle.js',
+        filename: '[name].[hash].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
@@ -26,13 +32,25 @@ const config = {
         new HtmlWebpackPlugin({
             // title: 'Development',
             filename: 'index.html',
-            template: './src/index.html',
+            template: './index.html',
         }),
         new HtmlWebpackPlugin({
             title: 'Development',
             filename: 'about.html',
-            template: './src/modules/about-us/about.html',
+            template: './modules/about-us/about.html',
             // chunks: [],
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/favicon-pro.ico'),
+                    to: path.resolve(__dirname, 'dist'),
+                },
+                // { from: './assets', to: './assets' },
+            ],
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].[hash].bundle.css',
         }),
     ],
 
@@ -46,7 +64,8 @@ const config = {
             {
                 test: /\.css|.s[ac]ss$/i,
                 use: [
-                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    // 'style-loader',
                     'css-loader',
                     'sass-loader',
                     'postcss-loader',

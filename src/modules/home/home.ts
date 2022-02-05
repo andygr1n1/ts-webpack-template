@@ -1,6 +1,6 @@
 import { action } from 'mobx'
-import { button } from '../../components/button'
-import { moneyValue, moreMoney, setMoney } from '../../store/basic_store'
+import { button } from '@/components/button'
+import { moneyValue, moreMoney, setMoney } from '@/store/basic_store'
 import styles from './home.module.scss'
 
 export const Home = () => {
